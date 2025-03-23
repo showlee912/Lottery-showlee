@@ -9,38 +9,94 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 共用的算法逻辑
+ * <p>
+ * rateTupleMap: 存储每个策略的概率元组
+ * awardRateInfoMap: 存储每个策略的奖品概率信息
  */
 public abstract class BaseAlgorithm implements IDrawAlgorithm {
 
-    // 数组初始化长度
+    // 概率元组数组的长度
     private final int RATE_TUPLE_LENGTH = 128;
 
-    // 存放概率与奖品对应的散列结果，strategyId -> rateTuple
+    /*
+     * 存放概率与奖品对应的散列结果，策略ID -> 概率元组
+     * rateTupleMap内部结构示例：
+     * {
+     * 1001L: [ // 策略ID为1001的概率元组数组
+     * 0: "A001", // 索引0处存储的奖品ID
+     * 1: "C003", // 索引1处存储的奖品ID
+     * 2: "B002", // 索引2处存储的奖品ID
+     * ... //
+     * 127: "A001" // 索引127处存储的奖品ID
+     * ],
+     *
+     * 1002L: [ // 策略ID为1002的概率元组数组
+     * 0: "D004",
+     * 1: "E005",
+     * ...
+     * 127: "D004"
+     * ]
+     * }
+     */
     protected Map<Long, String[]> rateTupleMap = new ConcurrentHashMap<>();
 
-    // 奖品区间概率值，strategyId -> [awardId->begin、awardId->end]
+    /*
+     * 奖品区间概率值，策略ID -> [awardId->begin、awardId->end]
+     * awardRateInfoMap内部结构示例：
+     * {
+     * 1001L: [ // 策略ID为1001的奖品概率列表
+     * AwardRateInfo{awardId="A001", awardRate=0.3}, // 奖品A占比30%
+     * AwardRateInfo{awardId="B002", awardRate=0.2}, // 奖品B占比20%
+     * AwardRateInfo{awardId="C003", awardRate=0.5} // 奖品C占比50%
+     * ],
+     * 
+     * 1002L: [ // 策略ID为1002的奖品概率列表
+     * AwardRateInfo{awardId="D004", awardRate=0.4}, // 奖品D占比40%
+     * AwardRateInfo{awardId="E005", awardRate=0.6} // 奖品E占比60%
+     * ]
+     * }
+     */
     protected Map<Long, List<AwardRateInfo>> awardRateInfoMap = new ConcurrentHashMap<>();
 
+    /**
+     * 初始化概率元组
+     *
+     * @param strategyId        策略ID
+     * @param awardRateInfoList 奖品概率配置列表（包含奖品ID和概率）
+     */
     @Override
     public void initRateTuple(Long strategyId, List<AwardRateInfo> awardRateInfoList) {
-        // 保存奖品概率信息
+
+        // 保存奖品概率信息到 awardRateInfoMap 中，键为策略ID，值为奖品概率配置列表
         awardRateInfoMap.put(strategyId, awardRateInfoList);
 
+        // 如果 rateTupleMap 中不存在当前策略ID，则新增一个长度为 RATE_TUPLE_LENGTH 的数组并添加进 rateTupleMap
         String[] rateTuple = rateTupleMap.computeIfAbsent(strategyId, k -> new String[RATE_TUPLE_LENGTH]);
 
+        // 初始化游标值
         int cursorVal = 0;
+
+        // 遍历奖品概率配置列表
         for (AwardRateInfo awardRateInfo : awardRateInfoList) {
+            // 将奖品概率（小数）乘以100，转换为整数值范围
             int rateVal = awardRateInfo.getAwardRate().multiply(new BigDecimal(100)).intValue();
 
-            // 循环填充概率范围值
+            // 循环填充概率范围值，将奖品ID填充到 rateTuple 数组的特定索引位置
             for (int i = cursorVal + 1; i <= (rateVal + cursorVal); i++) {
+                // 计算哈希索引，并将奖品ID填充到对应位置
                 rateTuple[hashIdx(i)] = awardRateInfo.getAwardId();
             }
+            // 更新游标值，以便下一个奖品的概率范围能够正确填充
             cursorVal += rateVal;
-
         }
     }
 
+    /**
+     * 检查指定策略是否已经初始化概率元组
+     *
+     * @param strategyId 策略ID
+     * @return true 表示已初始化，false 表示未初始化
+     */
     @Override
     public boolean isExistRateTuple(Long strategyId) {
         return rateTupleMap.containsKey(strategyId);
@@ -53,7 +109,8 @@ public abstract class BaseAlgorithm implements IDrawAlgorithm {
      * @return 索引
      */
     protected int hashIdx(int val) {
-        // 斐波那契散列增量，逻辑：黄金分割点：(√5 - 1) / 2 = 0.6180339887，Math.pow(2, 32) * 0.6180339887 = 0x61c88647
+        // 斐波那契散列增量，逻辑：黄金分割点：(√5 - 1) / 2 = 0.6180339887，Math.pow(2, 32) * 0.6180339887
+        // = 0x61c88647
         int HASH_INCREMENT = 0x61c88647;
         int hashCode = val * HASH_INCREMENT + HASH_INCREMENT;
         return hashCode & (RATE_TUPLE_LENGTH - 1);

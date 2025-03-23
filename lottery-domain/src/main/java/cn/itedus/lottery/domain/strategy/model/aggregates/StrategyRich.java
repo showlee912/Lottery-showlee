@@ -1,6 +1,5 @@
 package cn.itedus.lottery.domain.strategy.model.aggregates;
 
-
 import cn.itedus.lottery.infrastructure.po.Strategy;
 import cn.itedus.lottery.infrastructure.po.StrategyDetail;
 import lombok.AllArgsConstructor;
@@ -8,6 +7,7 @@ import lombok.Data;
 
 import java.util.List;
 
+// 聚合根对象
 @Data
 @AllArgsConstructor
 public class StrategyRich {
@@ -18,6 +18,5 @@ public class StrategyRich {
     private Strategy strategy;
     // 策略明细
     private List<StrategyDetail> strategyDetailList;
-
 
 }

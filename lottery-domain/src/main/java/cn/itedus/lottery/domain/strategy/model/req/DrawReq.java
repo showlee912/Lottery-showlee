@@ -13,23 +13,23 @@ public class DrawReq {
     // 策略ID
     private Long strategyId;
 
-    public DrawReq() {
-    }
+    // public DrawReq() {
+    // }
 
-    public String getuId() {
-        return uId;
-    }
+    // public String getuId() {
+    // return uId;
+    // }
 
-    public void setuId(String uId) {
-        this.uId = uId;
-    }
+    // public void setuId(String uId) {
+    // this.uId = uId;
+    // }
 
-    public Long getStrategyId() {
-        return strategyId;
-    }
+    // public Long getStrategyId() {
+    // return strategyId;
+    // }
 
-    public void setStrategyId(Long strategyId) {
-        this.strategyId = strategyId;
-    }
+    // public void setStrategyId(Long strategyId) {
+    // this.strategyId = strategyId;
+    // }
 
 }
