@@ -8,8 +8,6 @@ spring:
     url: jdbc:mysql://localhost:3306/lottery?useSSL=false&serverTimezone=UTC
     driver-class-name: com.mysql.cj.jdbc.Driver
 
-
-
 mybatis:
   mapper-locations: classpath:/mybatis/mapper/*.xml
   config-location: classpath:/mybatis/config/mybatis-config.xml
