@@ -9,16 +9,13 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 共用的算法逻辑
- * <p>
- * rateTupleMap: 存储每个策略的概率元组
- * awardRateInfoMap: 存储每个策略的奖品概率信息
  */
 public abstract class BaseAlgorithm implements IDrawAlgorithm {
 
-    // 概率元组数组的长度
+    // 数组初始化长度
     private final int RATE_TUPLE_LENGTH = 128;
 
-    /*
+    /**
      * 存放概率与奖品对应的散列结果，策略ID -> 概率元组
      * rateTupleMap内部结构示例：
      * {
@@ -40,7 +37,7 @@ public abstract class BaseAlgorithm implements IDrawAlgorithm {
      */
     protected Map<Long, String[]> rateTupleMap = new ConcurrentHashMap<>();
 
-    /*
+    /**
      * 奖品区间概率值，策略ID -> [awardId->begin、awardId->end]
      * awardRateInfoMap内部结构示例：
      * {
@@ -60,13 +57,16 @@ public abstract class BaseAlgorithm implements IDrawAlgorithm {
 
     /**
      * 初始化概率元组
+     * 1. 将奖项概率按百分比转换为整数值范围
+     * 2. 根据概率分布填充散列数组，每个奖项对应的区间段
+     * 3. 如果不存在当前策略ID
+     * 3. 算法复杂度为 O(n) ，n为奖项数量
      *
      * @param strategyId        策略ID
      * @param awardRateInfoList 奖品概率配置列表（包含奖品ID和概率）
      */
     @Override
     public void initRateTuple(Long strategyId, List<AwardRateInfo> awardRateInfoList) {
-
         // 保存奖品概率信息到 awardRateInfoMap 中，键为策略ID，值为奖品概率配置列表
         awardRateInfoMap.put(strategyId, awardRateInfoList);
 
@@ -74,7 +74,7 @@ public abstract class BaseAlgorithm implements IDrawAlgorithm {
         String[] rateTuple = rateTupleMap.computeIfAbsent(strategyId, k -> new String[RATE_TUPLE_LENGTH]);
 
         // 初始化游标值
-        int cursorVal = 0;
+        int cursor = 0;
 
         // 遍历奖品概率配置列表
         for (AwardRateInfo awardRateInfo : awardRateInfoList) {
@@ -82,12 +82,13 @@ public abstract class BaseAlgorithm implements IDrawAlgorithm {
             int rateVal = awardRateInfo.getAwardRate().multiply(new BigDecimal(100)).intValue();
 
             // 循环填充概率范围值，将奖品ID填充到 rateTuple 数组的特定索引位置
-            for (int i = cursorVal + 1; i <= (rateVal + cursorVal); i++) {
+            for (int i = cursor + 1; i <= (rateVal + cursor); i++) {
                 // 计算哈希索引，并将奖品ID填充到对应位置
                 rateTuple[hashIdx(i)] = awardRateInfo.getAwardId();
             }
+
             // 更新游标值，以便下一个奖品的概率范围能够正确填充
-            cursorVal += rateVal;
+            cursor += rateVal;
         }
     }
 
