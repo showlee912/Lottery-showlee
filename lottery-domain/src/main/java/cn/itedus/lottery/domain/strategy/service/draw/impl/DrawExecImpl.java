@@ -45,10 +45,10 @@ public class DrawExecImpl extends DrawBase implements IDrawExec {
         // 获取奖品信息
         Award award = strategyRepository.queryAwardInfo(awardId);
 
-        logger.info("执行策略抽奖完成，中奖用户：{} 奖品ID：{} 奖品名称：{}", req.getuId(), awardId, award.getAwardName());
+        logger.info("执行策略抽奖完成，中奖用户：{} 奖品ID：{} 奖品名称：{}", req.getUid(), awardId, award.getAwardName());
 
         // 封装结果
-        return new DrawResult(req.getuId(), req.getStrategyId(), awardId, award.getAwardName());
+        return new DrawResult(req.getUid(), req.getStrategyId(), awardId, award.getAwardName());
     }
 
 }

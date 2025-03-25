@@ -8,28 +8,9 @@ import lombok.Data;
 public class DrawReq {
 
     // 用户ID
-    private String uId;
+    private String Uid;
 
     // 策略ID
     private Long strategyId;
-
-    // public DrawReq() {
-    // }
-
-    // public String getuId() {
-    // return uId;
-    // }
-
-    // public void setuId(String uId) {
-    // this.uId = uId;
-    // }
-
-    // public Long getStrategyId() {
-    // return strategyId;
-    // }
-
-    // public void setStrategyId(Long strategyId) {
-    // this.strategyId = strategyId;
-    // }
 
 }

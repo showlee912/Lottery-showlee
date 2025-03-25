@@ -15,7 +15,7 @@ public abstract class BaseAlgorithm implements IDrawAlgorithm {
     // 数组初始化长度
     private final int RATE_TUPLE_LENGTH = 128;
 
-    /**
+    /*
      * 存放概率与奖品对应的散列结果，策略ID -> 概率元组
      * rateTupleMap内部结构示例：
      * {
@@ -37,7 +37,7 @@ public abstract class BaseAlgorithm implements IDrawAlgorithm {
      */
     protected Map<Long, String[]> rateTupleMap = new ConcurrentHashMap<>();
 
-    /**
+    /*
      * 奖品区间概率值，策略ID -> [awardId->begin、awardId->end]
      * awardRateInfoMap内部结构示例：
      * {
@@ -54,6 +54,7 @@ public abstract class BaseAlgorithm implements IDrawAlgorithm {
      * }
      */
     protected Map<Long, List<AwardRateInfo>> awardRateInfoMap = new ConcurrentHashMap<>();
+
 
     /**
      * 初始化概率元组
@@ -92,6 +93,7 @@ public abstract class BaseAlgorithm implements IDrawAlgorithm {
         }
     }
 
+
     /**
      * 检查指定策略是否已经初始化概率元组
      *
@@ -102,6 +104,7 @@ public abstract class BaseAlgorithm implements IDrawAlgorithm {
     public boolean isExistRateTuple(Long strategyId) {
         return rateTupleMap.containsKey(strategyId);
     }
+
 
     /**
      * 斐波那契（Fibonacci）散列法，计算哈希索引下标值
