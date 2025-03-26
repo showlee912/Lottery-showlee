@@ -7,9 +7,14 @@ import lombok.Data;
 
 import java.util.List;
 
-// 聚合根对象
+
+/**
+ * 策略信息聚合根对象
+ */
+
 @Data
 @AllArgsConstructor
+
 public class StrategyRich {
 
     // 策略ID

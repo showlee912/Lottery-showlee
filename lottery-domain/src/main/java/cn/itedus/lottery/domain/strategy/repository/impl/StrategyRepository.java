@@ -14,8 +14,7 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
-核心数据访问实现类
- 将所需的多种数据聚合到聚合对象中
+核心数据访问实现类，从DAO层将所需的多种数据聚合到聚合对象中
  */
 @Component
 public class StrategyRepository implements IStrategyRepository {

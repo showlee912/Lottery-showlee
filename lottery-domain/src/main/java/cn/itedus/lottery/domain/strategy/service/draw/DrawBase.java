@@ -19,7 +19,7 @@ public class DrawBase extends DrawConfig {
      * 3. 将数据库配置的奖品概率数据转换为算法需要的格式
      *
      * @param strategyId 策略ID
-     * @param strategyMode 策略模式（0: 单项概率 | 1: 总体概率）
+     * @param strategyMode 策略模式（1: 单项概率 | 2: 总体概率）
      * @param strategyDetailList 策略详细配置列表（包含奖品概率数据）
      */
     public void checkAndInitRateData(Long strategyId, Integer strategyMode, List<StrategyDetail> strategyDetailList) {

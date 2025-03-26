@@ -5,6 +5,9 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 
+/**
+ * 奖品概率VO
+ */
 @Data
 @AllArgsConstructor
 public class AwardRateInfo {
