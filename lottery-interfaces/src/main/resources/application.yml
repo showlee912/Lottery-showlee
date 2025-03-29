@@ -26,9 +26,9 @@ dubbo:
   scan:
     base-packages: cn.itedus.lottery.rpc
 
-# 新增日志配置（添加在文件末尾）
-logging:
-  level:
-    root: info
-    org.apache.dubbo: debug
-    cn.itedus.lottery: debug
+## 新增日志配置（添加在文件末尾）
+#logging:
+#  level:
+#    root: info
+#    org.apache.dubbo: debug
+#    cn.itedus.lottery: debug

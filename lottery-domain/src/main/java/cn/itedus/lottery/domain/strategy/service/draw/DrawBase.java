@@ -23,7 +23,7 @@ public class DrawBase extends DrawConfig {
      * @param strategyDetailList 策略详细配置列表（包含奖品概率数据）
      */
     public void checkAndInitRateData(Long strategyId, Integer strategyMode, List<StrategyDetail> strategyDetailList) {
-        // 仅处理权重型抽奖策略（策略模式=1）
+        // 仅处理单项概率策略（策略模式=1）
         if (1 != strategyMode) return;
 
         // 根据策略模式获取对应的抽奖算法（从父类继承的算法集合）
