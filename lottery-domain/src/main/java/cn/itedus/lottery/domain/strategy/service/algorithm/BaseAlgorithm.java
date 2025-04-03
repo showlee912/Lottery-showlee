@@ -55,7 +55,6 @@ public abstract class BaseAlgorithm implements IDrawAlgorithm {
      */
     protected Map<Long, List<AwardRateInfo>> awardRateInfoMap = new ConcurrentHashMap<>();
 
-
     /**
      * 初始化概率元组
      * 1. 将奖项概率按百分比转换为整数值范围
@@ -93,7 +92,6 @@ public abstract class BaseAlgorithm implements IDrawAlgorithm {
         }
     }
 
-
     /**
      * 检查指定策略是否已经初始化概率元组
      *
@@ -104,7 +102,6 @@ public abstract class BaseAlgorithm implements IDrawAlgorithm {
     public boolean isExistRateTuple(Long strategyId) {
         return rateTupleMap.containsKey(strategyId);
     }
-
 
     /**
      * 斐波那契（Fibonacci）散列法，计算哈希索引下标值

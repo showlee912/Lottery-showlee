@@ -1,6 +1,9 @@
-package cn.itedus.lottery.domain.strategy.repository.impl;
+package cn.itedus.lottery.infrastructure.repository;
 
 import cn.itedus.lottery.domain.strategy.model.aggregates.StrategyRich;
+import cn.itedus.lottery.domain.strategy.model.vo.AwardBriefVO;
+import cn.itedus.lottery.domain.strategy.model.vo.StrategyBriefVO;
+import cn.itedus.lottery.domain.strategy.model.vo.StrategyDetailBriefVO;
 import cn.itedus.lottery.domain.strategy.repository.IStrategyRepository;
 import cn.itedus.lottery.infrastructure.dao.IAwardDao;
 import cn.itedus.lottery.infrastructure.dao.IStrategyDao;
@@ -8,10 +11,12 @@ import cn.itedus.lottery.infrastructure.dao.IStrategyDetailDao;
 import cn.itedus.lottery.infrastructure.po.Award;
 import cn.itedus.lottery.infrastructure.po.Strategy;
 import cn.itedus.lottery.infrastructure.po.StrategyDetail;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
 核心数据访问实现类，从DAO层将所需的多种数据聚合到聚合对象中
@@ -35,9 +40,25 @@ public class StrategyRepository implements IStrategyRepository {
      */
     @Override
     public StrategyRich queryStrategyRich(Long strategyId) {
+
+        //得到数据库中策略详细配置
         Strategy strategy = strategyDao.queryStrategy(strategyId);
         List<StrategyDetail> strategyDetailList = strategyDetailDao.queryStrategyDetailList(strategyId);
-        return new StrategyRich(strategyId, strategy, strategyDetailList);
+
+        // 转换为需要的VO对象
+        StrategyBriefVO strategyBriefVO = new StrategyBriefVO();
+        BeanUtils.copyProperties(strategy, strategyBriefVO);
+
+        // 使用Stream API处理strategyDetail的VO集合转化
+        List<StrategyDetailBriefVO> strategyDetailBriefVOList = strategyDetailList.stream()
+                .map(detail -> {
+                    StrategyDetailBriefVO vo = new StrategyDetailBriefVO();
+                    BeanUtils.copyProperties(detail, vo);
+                    return vo;
+                })
+                .collect(Collectors.toList());
+
+        return new StrategyRich(strategyId, strategyBriefVO, strategyDetailBriefVOList);
     }
 
     /**
@@ -46,8 +67,13 @@ public class StrategyRepository implements IStrategyRepository {
      * @return 奖品数据对象
      */
     @Override
-    public Award queryAwardInfo(String awardId) {
-        return awardDao.queryAwardInfo(awardId);
+    public AwardBriefVO queryAwardInfo(String awardId) {
+        Award award = awardDao.queryAwardInfo(awardId);
+
+        // 如果性能不是关键考量，可以简化为：
+        AwardBriefVO awardBriefVO = new AwardBriefVO();
+        BeanUtils.copyProperties(award, awardBriefVO);
+        return awardBriefVO;
     }
 
     /**

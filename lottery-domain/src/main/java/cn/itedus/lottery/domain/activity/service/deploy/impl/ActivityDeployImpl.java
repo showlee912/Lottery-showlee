@@ -11,11 +11,13 @@ import cn.itedus.lottery.domain.activity.service.deploy.IActivityDeploy;
 import com.alibaba.fastjson2.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
 
 @Slf4j
+@Service
 public class ActivityDeployImpl implements IActivityDeploy {
 
     @Resource
@@ -29,7 +31,6 @@ public class ActivityDeployImpl implements IActivityDeploy {
      */
     @Override
     public void createActivity(ActivityConfigReq req) {
-        log.info("创建活动配置开始，activityId：{}", req.getActivityId());
         ActivityConfigRich activityConfigRich = req.getActivityConfigRich();
         try {
             // 添加活动配置

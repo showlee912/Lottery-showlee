@@ -1,8 +1,8 @@
 package cn.itedus.lottery.domain.strategy.service.draw;
 
+import cn.itedus.lottery.domain.activity.model.vo.StrategyDetailVO;
 import cn.itedus.lottery.domain.strategy.model.vo.AwardRateInfo;
 import cn.itedus.lottery.domain.strategy.service.algorithm.IDrawAlgorithm;
-import cn.itedus.lottery.infrastructure.po.StrategyDetail;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +22,7 @@ public class DrawBase extends DrawConfig {
      * @param strategyMode 策略模式（1: 单项概率 | 2: 总体概率）
      * @param strategyDetailList 策略详细配置列表（包含奖品概率数据）
      */
-    public void checkAndInitRateData(Long strategyId, Integer strategyMode, List<StrategyDetail> strategyDetailList) {
+    public void checkAndInitRateData(Long strategyId, Integer strategyMode, List<StrategyDetailVO> strategyDetailList) {
         // 仅处理单项概率策略（策略模式=1）
         if (1 != strategyMode) return;
 
@@ -35,7 +35,7 @@ public class DrawBase extends DrawConfig {
 
         // 转换数据结构：将策略详情列表转换为算法所需的概率元组格式
         List<AwardRateInfo> awardRateInfoList = new ArrayList<>(strategyDetailList.size());
-        for (StrategyDetail strategyDetail : strategyDetailList) {
+        for (StrategyDetailVO strategyDetail : strategyDetailList) {
             // 构建包含奖品ID和概率值的元组对象
             awardRateInfoList.add(new AwardRateInfo(
                     strategyDetail.getAwardId(),
