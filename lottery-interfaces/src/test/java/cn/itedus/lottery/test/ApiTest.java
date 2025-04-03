@@ -1,12 +1,6 @@
 package cn.itedus.lottery.test;
 
 import cn.itedus.lottery.infrastructure.dao.IActivityDao;
-import cn.itedus.lottery.infrastructure.po.Activity;
-import cn.itedus.lottery.infrastructure.po.Award;
-import cn.itedus.lottery.rpc.IActivityBooth;
-import cn.itedus.lottery.rpc.req.ActivityReq;
-import cn.itedus.lottery.rpc.res.ActivityRes;
-import com.alibaba.fastjson.JSON;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -147,7 +141,7 @@ public class ApiTest {
     }
 }
 
-class DrawStrategy {
+ class DrawStrategy {
     // 黄金分割点散列因子
     private final int HASH_INCREMENT = 0x61c88647;
     // 概率分布数组

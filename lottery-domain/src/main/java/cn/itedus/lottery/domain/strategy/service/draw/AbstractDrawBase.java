@@ -71,7 +71,6 @@ public abstract class AbstractDrawBase extends DrawStrategySupport implements ID
         DrawAlgorithm.initRateTuple(strategyId,awardRateInfos);
     }
 
-
     /**
      * 3. 获取不在抽奖范围内的列表，包括：奖品库存为空、风控策略、临时调整等
      *

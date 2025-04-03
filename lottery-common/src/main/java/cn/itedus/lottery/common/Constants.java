@@ -1,39 +1,35 @@
 package cn.itedus.lottery.common;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 /**
  * 枚举信息定义
  */
 public class Constants {
 
+    @Getter
+    @AllArgsConstructor
     public enum ResponseCode {
         SUCCESS("0000", "成功"),
-        UN_ERROR("0001","未知失败"),
-        ILLEGAL_PARAMETER("0002","非法参数"),
-        INDEX_DUP("0003","主键冲突");
+
+        UN_ERROR("0001", "未知失败"),
+
+        ILLEGAL_PARAMETER("0002", "非法参数"),
+
+        INDEX_DUP("0003", "主键冲突");
 
         private final String code;
         private final String info;
 
-        ResponseCode(String code, String info) {
-            this.code = code;
-            this.info = info;
-        }
-
-        public String getCode() {
-            return code;
-        }
-
-        public String getInfo() {
-            return info;
-        }
-
     }
-
 
 
     /**
      * 抽奖策略模式：总体概率、单项概率
      */
+    @Getter
+    @AllArgsConstructor
     public enum StrategyMode {
 
         SINGLE(1, "单项概率"),
@@ -43,21 +39,8 @@ public class Constants {
         private Integer code;
         private String info;
 
-        StrategyMode(Integer code, String info) {
-            this.code = code;
-            this.info = info;
-        }
-
-        public Integer getCode() {
-            return code;
-        }
-
         public void setCode(Integer code) {
             this.code = code;
-        }
-
-        public String getInfo() {
-            return info;
         }
 
         public void setInfo(String info) {
@@ -68,32 +51,21 @@ public class Constants {
     /**
      * 中奖状态：0未中奖、1已中奖、2兜底奖
      */
+    @Getter
+    @AllArgsConstructor
     public enum DrawState {
 
-        FAIL(0,"未中奖"),
+        FAIL(0, "未中奖"),
 
         SUCCESS(1, "已中奖"),
 
-        Cover(2,"兜底奖");
+        Cover(2, "兜底奖");
 
         private Integer code;
         private String info;
 
-        DrawState(Integer code, String info) {
-            this.code = code;
-            this.info = info;
-        }
-
-        public Integer getCode() {
-            return code;
-        }
-
         public void setCode(Integer code) {
             this.code = code;
-        }
-
-        public String getInfo() {
-            return info;
         }
 
         public void setInfo(String info) {
@@ -105,6 +77,8 @@ public class Constants {
     /**
      * 发奖状态：0等待发奖、1发奖成功、2发奖失败
      */
+    @Getter
+    @AllArgsConstructor
     public enum AwardState {
 
         /**
@@ -125,21 +99,8 @@ public class Constants {
         private Integer code;
         private String info;
 
-        AwardState(Integer code, String info) {
-            this.code = code;
-            this.info = info;
-        }
-
-        public Integer getCode() {
-            return code;
-        }
-
         public void setCode(Integer code) {
             this.code = code;
-        }
-
-        public String getInfo() {
-            return info;
         }
 
         public void setInfo(String info) {
@@ -150,6 +111,8 @@ public class Constants {
     /**
      * 奖品类型（1:文字描述、2:兑换码、3:优惠券、4:实物奖品）
      */
+    @Getter
+    @AllArgsConstructor
     public enum AwardType {
         /**
          * 文字描述
@@ -171,21 +134,9 @@ public class Constants {
         private Integer code;
         private String info;
 
-        AwardType(Integer code, String info) {
-            this.code = code;
-            this.info = info;
-        }
-
-        public Integer getCode() {
-            return code;
-        }
 
         public void setCode(Integer code) {
             this.code = code;
-        }
-
-        public String getInfo() {
-            return info;
         }
 
         public void setInfo(String info) {
@@ -196,6 +147,8 @@ public class Constants {
     /**
      * 活动状态
      */
+    @Getter
+    @AllArgsConstructor
     public enum ActivityState {
 
         /** 1：编辑 */
@@ -218,26 +171,25 @@ public class Constants {
         private Integer code;
         private String info;
 
-        ActivityState(Integer code, String info) {
-            this.code = code;
-            this.info = info;
-        }
-
-        public Integer getCode() {
-            return code;
-        }
-
         public void setCode(Integer code) {
             this.code = code;
-        }
-
-        public String getInfo() {
-            return info;
         }
 
         public void setInfo(String info) {
             this.info = info;
         }
+    }
+
+    /**
+     * Ids 生成策略
+     */
+    public enum Ids {
+        /** 雪花算法 */
+        SnowFlake,
+        /** 日期算法 */
+        ShortCode,
+        /** 随机算法 */
+        RandomNumeric;
     }
 
 }
