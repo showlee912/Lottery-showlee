@@ -3,7 +3,14 @@
         PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
+    <!-- 将settings移到typeAliases之前 -->
+    <settings>
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+    </settings>
+
     <typeAliases>
         <package name="cn.itedus.lottery.infrastructure.po.Activity"/>
     </typeAliases>
+
+    <!-- 如果需要，可以在这里添加其他配置元素 -->
 </configuration>

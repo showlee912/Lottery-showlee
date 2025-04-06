@@ -26,7 +26,7 @@ import javax.annotation.Resource;
 @SpringBootTest
 public class SpringRunnerTest {
 
-    private Logger logger = LoggerFactory.getLogger(SpringRunnerTest.class);
+    private final Logger logger = LoggerFactory.getLogger(SpringRunnerTest.class);
 
     @Resource
     private IActivityDao activityDao;
