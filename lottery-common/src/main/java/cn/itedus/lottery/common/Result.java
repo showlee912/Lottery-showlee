@@ -1,10 +1,14 @@
 package cn.itedus.lottery.common;
 
+import lombok.Data;
+
 import java.io.Serializable;
 
 /**
  * 统一返回对象中，Code码、Info描述
  */
+
+@Data
 public class Result implements Serializable {
 
     private static final long serialVersionUID = -3826891916021780628L;
@@ -16,20 +20,8 @@ public class Result implements Serializable {
         this.info = info;
     }
 
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getInfo() {
-        return info;
-    }
-
-    public void setInfo(String info) {
-        this.info = info;
+    public static Result buildResult(Constants.ResponseCode code) {
+        return new Result(code.getCode(), code.getInfo());
     }
 
     public static Result buildResult(Constants.ResponseCode code, String info) {

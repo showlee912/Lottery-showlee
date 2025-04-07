@@ -23,7 +23,6 @@ public class ActivityDeployImpl implements IActivityDeploy {
     @Resource
     private IActivityRepository activityRepository;
 
-
     /**
      * 创建活动信息
      *

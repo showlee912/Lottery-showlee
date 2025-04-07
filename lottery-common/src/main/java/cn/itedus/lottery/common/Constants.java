@@ -17,7 +17,9 @@ public class Constants {
 
         ILLEGAL_PARAMETER("0002", "非法参数"),
 
-        INDEX_DUP("0003", "主键冲突");
+        INDEX_DUP("0003", "主键冲突"),
+
+        NO_UPDATE("0004","SQL操作无更新");
 
         private final String code;
         private final String info;
