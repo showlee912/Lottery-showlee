@@ -13,7 +13,7 @@ mini-db-router:
       list: db01,db02
       db00:
         driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://localhost:3306/lottery_02?useSSL=false&serverTimezone=UTC
+        url: jdbc:mysql://localhost:3306/lottery?useSSL=false&serverTimezone=UTC
         username: root
         password: 123456
       db01:

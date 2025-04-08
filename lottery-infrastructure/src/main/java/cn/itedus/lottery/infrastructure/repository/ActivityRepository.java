@@ -130,7 +130,7 @@ public class ActivityRepository implements IActivityRepository {
      */
     @Override
     public int subtractionActivityStock(Long activityId) {
-
+        return activityDao.subtractionActivityStock(activityId);
     }
 
     /**

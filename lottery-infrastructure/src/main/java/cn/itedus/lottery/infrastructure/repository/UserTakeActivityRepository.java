@@ -31,7 +31,7 @@ public class UserTakeActivityRepository implements IUserTakeActivityRepository {
     public int subtractionLeftCount(Long activityId, String activityName, Integer takeCount, Integer userTakeLeftCount, String uId, Date partakeDate) {
         if (null == userTakeLeftCount) {
             UserTakeActivityCount userTakeActivityCount = new UserTakeActivityCount();
-            userTakeActivityCount.setuId(uId);
+            userTakeActivityCount.setUId(uId);
             userTakeActivityCount.setActivityId(activityId);
             userTakeActivityCount.setTotalCount(takeCount);
             userTakeActivityCount.setLeftCount(takeCount - 1);
@@ -39,7 +39,7 @@ public class UserTakeActivityRepository implements IUserTakeActivityRepository {
             return 1;
         } else {
             UserTakeActivityCount userTakeActivityCount = new UserTakeActivityCount();
-            userTakeActivityCount.setuId(uId);
+            userTakeActivityCount.setUId(uId);
             userTakeActivityCount.setActivityId(activityId);
             return userTakeActivityCountDao.updateLeftCount(userTakeActivityCount);
         }
@@ -48,7 +48,7 @@ public class UserTakeActivityRepository implements IUserTakeActivityRepository {
     @Override
     public void takeActivity(Long activityId, String activityName, Integer takeCount, Integer userTakeLeftCount, String uId, Date takeDate, Long takeId) {
         UserTakeActivity userTakeActivity = new UserTakeActivity();
-        userTakeActivity.setuId(uId);
+        userTakeActivity.setUId(uId);
         userTakeActivity.setTakeId(takeId);
         userTakeActivity.setActivityId(activityId);
         userTakeActivity.setActivityName(activityName);

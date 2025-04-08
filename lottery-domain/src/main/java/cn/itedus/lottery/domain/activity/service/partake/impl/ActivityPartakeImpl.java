@@ -47,7 +47,7 @@ public class ActivityPartakeImpl extends BaseActivityPartake {
     @Override
     protected Result checkActivityBill(PartakeReq partake, ActivityBillVO bill) {
         // 1. 校验活动状态是否可用
-        if (Constants.ActivityState.DOING.getCode().equals(bill.getState())) {
+        if (!Constants.ActivityState.DOING.getCode().equals(bill.getState())) {
             logger.warn("活动当前状态非可用 state：{}", bill.getState());
             return Result.buildResult(Constants.ResponseCode.UN_ERROR, "活动当前状态非可用");
         }

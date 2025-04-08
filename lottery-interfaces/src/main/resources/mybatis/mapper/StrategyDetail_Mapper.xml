@@ -3,15 +3,6 @@
 <mapper namespace="cn.itedus.lottery.infrastructure.dao.IStrategyDetailDao">
 
     <resultMap id="strategyDetailMap" type="cn.itedus.lottery.infrastructure.po.StrategyDetail">
-        <id column="id" property="id"/>
-        <result column="strategy_id" property="strategyId"/>
-        <result column="award_id" property="awardId"/>
-        <result column="award_name" property="awardName"/>
-        <result column="award_count" property="awardCount"/>
-        <result column="award_surplus_count" property="awardSurplusCount"/>
-        <result column="award_rate" property="awardRate"/>
-        <result column="create_time" property="createTime"/>
-        <result column="update_time" property="updateTime"/>
     </resultMap>
 
     <insert id="insertList" parameterType="java.util.List">

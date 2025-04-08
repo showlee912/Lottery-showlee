@@ -1,6 +1,5 @@
 package cn.itedus.lottery.infrastructure.dao;
 
-import cn.bugstack.middleware.db.router.annotation.DBRouter;
 import cn.itedus.lottery.infrastructure.po.UserTakeActivity;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -15,7 +14,6 @@ public interface IUserTakeActivityDao {
      *
      * @param userTakeActivity 入参
      */
-    @DBRouter(key = "uId")
     void insert(UserTakeActivity userTakeActivity);
 
 }
