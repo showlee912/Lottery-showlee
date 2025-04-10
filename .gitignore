@@ -45,3 +45,4 @@ release.properties
 .mvn/
 mvnw
 mvnw.cmd
+/.vscode/

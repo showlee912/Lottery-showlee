@@ -19,13 +19,14 @@ public class Constants {
 
         INDEX_DUP("0003", "主键冲突"),
 
-        NO_UPDATE("0004","SQL操作无更新");
+        NO_UPDATE("0004","SQL操作无更新"),
+
+        LOSING_DRAW("D001", "未中奖");
 
         private final String code;
         private final String info;
 
     }
-
 
     /**
      * 抽奖策略模式：总体概率、单项概率
@@ -192,6 +193,51 @@ public class Constants {
         ShortCode,
         /** 随机算法 */
         RandomNumeric;
+    }
+
+    /**
+     * 活动单使用状态 0未使用、1已使用
+     */
+    @Getter
+    @AllArgsConstructor
+    public enum TaskState {
+
+        NO_USED(0, "未使用"),
+        USED(1, "已使用");
+
+        private Integer code;
+        private String info;
+
+        public void setCode(Integer code) {
+            this.code = code;
+        }
+
+        public void setInfo(String info) {
+            this.info = info;
+        }
+    }
+
+    /**
+     * 发奖状态 0初始、1完成、2失败
+     */
+    @Getter
+    @AllArgsConstructor
+    public enum GrantState{
+
+        INIT(0, "初始"),
+        COMPLETE(1, "完成"),
+        FAIL(2, "失败");
+
+        private Integer code;
+        private String info;
+
+        public void setCode(Integer code) {
+            this.code = code;
+        }
+
+        public void setInfo(String info) {
+            this.info = info;
+        }
     }
 
 }

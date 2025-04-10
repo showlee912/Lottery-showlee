@@ -118,8 +118,33 @@ public class ActivityRepository implements IActivityRepository {
         userTakeActivityCountReq.setActivityId(req.getActivityId());
         UserTakeActivityCount userTakeActivityCount = userTakeActivityCountDao.queryUserTakeActivityCount(userTakeActivityCountReq);
 
+
+        // 用户首次参与活动，初始化参与记录
+        if (null == userTakeActivityCount) {
+            userTakeActivityCount = new UserTakeActivityCount();
+            userTakeActivityCount.setUId(req.getUId());
+            userTakeActivityCount.setActivityId(req.getActivityId());
+            userTakeActivityCount.setTotalCount(activity.getTakeCount());
+            userTakeActivityCount.setLeftCount(activity.getTakeCount());
+
+            // 插入初始记录
+            userTakeActivityCountDao.insert(userTakeActivityCount);
+        }
+
         // 封装结果信息
-        return getActivityBillVO(req, activity, userTakeActivityCount);
+        ActivityBillVO activityBillVO = new ActivityBillVO();
+        activityBillVO.setUId(req.getUId());
+        activityBillVO.setActivityId(req.getActivityId());
+        activityBillVO.setActivityName(activity.getActivityName());
+        activityBillVO.setBeginDateTime(activity.getBeginDateTime());
+        activityBillVO.setEndDateTime(activity.getEndDateTime());
+        activityBillVO.setTakeCount(activity.getTakeCount());
+        activityBillVO.setStockSurplusCount(activity.getStockSurplusCount());
+        activityBillVO.setStrategyId(activity.getStrategyId());
+        activityBillVO.setState(activity.getState());
+        activityBillVO.setUserTakeLeftCount(null == userTakeActivityCount ? userTakeActivityCountReq.getTotalCount() : userTakeActivityCount.getLeftCount());
+
+        return activityBillVO;
     }
 
     /**
@@ -133,26 +158,4 @@ public class ActivityRepository implements IActivityRepository {
         return activityDao.subtractionActivityStock(activityId);
     }
 
-    /**
-     * 获取活动账单VO
-     *
-     * @param req 参与活动请求
-     * @param activity 活动信息
-     * @param userTakeActivityCount 用户参与活动次数
-     * @return 活动账单VO
-     */
-    private static ActivityBillVO getActivityBillVO(PartakeReq req, Activity activity, UserTakeActivityCount userTakeActivityCount) {
-        ActivityBillVO activityBillVO = new ActivityBillVO();
-        activityBillVO.setUId(req.getUId());
-        activityBillVO.setActivityId(req.getActivityId());
-        activityBillVO.setActivityName(activity.getActivityName());
-        activityBillVO.setBeginDateTime(activity.getBeginDateTime());
-        activityBillVO.setEndDateTime(activity.getEndDateTime());
-        activityBillVO.setTakeCount(activity.getTakeCount());
-        activityBillVO.setStockSurplusCount(activity.getStockSurplusCount());
-        activityBillVO.setStrategyId(activity.getStrategyId());
-        activityBillVO.setState(activity.getState());
-        activityBillVO.setUserTakeLeftCount(null == userTakeActivityCount ? null : userTakeActivityCount.getLeftCount());
-        return activityBillVO;
-    }
 }
