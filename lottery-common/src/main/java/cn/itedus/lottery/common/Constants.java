@@ -4,10 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * 枚举信息定义
+ * 枚举信息常量
  */
 public class Constants {
 
+    /**
+     * 返回信息枚举
+    * */
     @Getter
     @AllArgsConstructor
     public enum ResponseCode {
@@ -52,7 +55,7 @@ public class Constants {
     }
 
     /**
-     * 中奖状态：0未中奖、1已中奖、2兜底奖
+     * 中奖状态
      */
     @Getter
     @AllArgsConstructor
@@ -78,7 +81,7 @@ public class Constants {
 
 
     /**
-     * 发奖状态：0等待发奖、1发奖成功、2发奖失败
+     * 发奖状态
      */
     @Getter
     @AllArgsConstructor
@@ -112,7 +115,7 @@ public class Constants {
     }
 
     /**
-     * 奖品类型（1:文字描述、2:兑换码、3:优惠券、4:实物奖品）
+     * 奖品类型
      */
     @Getter
     @AllArgsConstructor
@@ -196,7 +199,7 @@ public class Constants {
     }
 
     /**
-     * 活动单使用状态 0未使用、1已使用
+     * 活动单使用状态
      */
     @Getter
     @AllArgsConstructor
@@ -218,7 +221,7 @@ public class Constants {
     }
 
     /**
-     * 发奖状态 0初始、1完成、2失败
+     * 发奖状态
      */
     @Getter
     @AllArgsConstructor
@@ -240,4 +243,39 @@ public class Constants {
         }
     }
 
+    /**
+     * 全局属性
+     */
+    public static final class Global {
+        /** 空节点值 */
+        public static final Long TREE_NULL_NODE = 0L;
+    }
+
+    /**
+     * 决策树节点
+     */
+    public static final class NodeType{
+        /** 树茎 */
+        public static final Integer STEM = 1;
+        /** 果实 */
+        public static final Integer FRUIT = 2;
+    }
+
+    /**
+     * 规则限定类型
+     */
+    public static final class RuleLimitType {
+        /** 等于 */
+        public static final int EQUAL = 1;
+        /** 大于 */
+        public static final int GT = 2;
+        /** 小于 */
+        public static final int LT = 3;
+        /** 大于&等于 */
+        public static final int GE = 4;
+        /** 小于&等于 */
+        public static final int LE = 5;
+        /** 枚举 */
+        public static final int ENUM = 6;
+    }
 }
