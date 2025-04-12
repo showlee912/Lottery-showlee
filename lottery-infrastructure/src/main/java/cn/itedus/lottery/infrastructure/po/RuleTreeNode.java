@@ -1,19 +1,17 @@
-package cn.itedus.lottery.domain.rule.model.vo;
+package cn.itedus.lottery.infrastructure.po;
 
 import lombok.Data;
 
-import java.util.List;
-
 /**
- * 规则树节点VO
+ * 规则树节点表
  */
 @Data
-public class TreeNodeVO {
+public class RuleTreeNode {
 
+    /** 主键ID */
+    private Long id;
     /** 规则树ID */
     private Long treeId;
-    /** 规则树节点ID */
-    private Long treeNodeId;
     /** 节点类型；1子叶、2果实 */
     private Integer nodeType;
     /** 节点值[nodeType=2]；果实值 */
@@ -22,8 +20,5 @@ public class TreeNodeVO {
     private String ruleKey;
     /** 规则描述 */
     private String ruleDesc;
-    /** 节点链路：指向的下一个节点 */
-    private List<TreeNodeLineVO> treeNodeLineInfoList;
-
 
 }

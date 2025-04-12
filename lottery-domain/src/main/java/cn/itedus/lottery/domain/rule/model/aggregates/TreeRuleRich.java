@@ -12,9 +12,11 @@ import java.util.Map;
 @Data
 public class TreeRuleRich {
 
-    /** 树根信息 */
+    /**根节点VO*/
     private TreeRootVO treeRoot;
 
+    /**节点VO映射*/
     private Map<Long, TreeNodeVO> treeNodeMap;
+
 }
 

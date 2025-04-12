@@ -19,11 +19,15 @@ public abstract class BaseLogic implements LogicFilter {
      */
     @Override
     public Long filter(String matterValue, List<TreeNodeLineVO> treeNodeLineInfoList) {
+        // 遍历连线List
         for (TreeNodeLineVO nodeLine : treeNodeLineInfoList) {
+            // 判断决策值是否符合当前节点连线的规则
             if (decisionLogic(matterValue, nodeLine)) {
+                // 如果符合规则，返回当前节点连线的目标节点ID
                 return nodeLine.getNodeIdTo();
             }
         }
+        // 未匹配任何规则，返回空节点
         return Constants.Global.TREE_NULL_NODE;
     }
 
