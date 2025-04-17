@@ -3,14 +3,16 @@ package cn.itedus.lottery.application.process.impl;
 import cn.itedus.lottery.application.process.IActivityProcess;
 import cn.itedus.lottery.application.process.req.DrawProcessReq;
 import cn.itedus.lottery.application.process.res.DrawProcessResult;
+import cn.itedus.lottery.application.process.res.RuleQuantificationCrowdResult;
 import cn.itedus.lottery.common.Constants;
 import cn.itedus.lottery.domain.activity.model.req.PartakeReq;
 import cn.itedus.lottery.domain.activity.model.res.PartakeResult;
 import cn.itedus.lottery.domain.activity.model.vo.DrawOrderVO;
 import cn.itedus.lottery.domain.activity.service.partake.IActivityPartake;
+import cn.itedus.lottery.domain.rule.model.req.DecisionMatterReq;
 import cn.itedus.lottery.domain.strategy.model.req.DrawReq;
 import cn.itedus.lottery.domain.strategy.model.res.DrawResult;
-import cn.itedus.lottery.domain.strategy.model.vo.DrawAwardInfo;
+import cn.itedus.lottery.domain.strategy.model.vo.DrawAwardVO;
 import cn.itedus.lottery.domain.strategy.service.draw.IDrawExec;
 import cn.itedus.lottery.domain.support.ids.IIdGenerator;
 import org.springframework.stereotype.Service;
@@ -33,6 +35,21 @@ public class ActivityProcessImpl implements IActivityProcess {
     @Resource
     private Map<Constants.Ids, IIdGenerator> idGeneratorMap;
 
+    /**
+     * 执行抽奖流程
+     *
+     * <p>该方法实现了完整的抽奖流程，包括以下几个步骤：</p>
+     * <ol>
+     *     <li>用户参与活动：通过 {@link IActivityPartake#doPartake(PartakeReq)} 方法判断用户是否可以参与指定的活动。</li>
+     *     <li>执行抽奖：如果用户可以参与活动，则调用 {@link IDrawExec#doDrawExec(DrawReq)} 方法执行抽奖。</li>
+     *     <li>结果落库：将抽奖结果保存到数据库中，通过 {@link IActivityPartake#recordDrawOrder(DrawOrderVO)} 方法记录抽奖订单。</li>
+     *     <li>发送MQ：触发发奖流程（该步骤目前未实现）。</li>
+     *     <li>返回结果：返回抽奖结果，包括是否成功以及具体的奖品信息。</li>
+     * </ol>
+     *
+     * @param req 抽奖请求对象，包含用户ID和活动ID
+     * @return 抽奖结果对象，包含状态码、状态信息和奖品信息
+     */
     @Override
     public DrawProcessResult doDrawProcess(DrawProcessReq req) {
         try {
@@ -57,8 +74,8 @@ public class ActivityProcessImpl implements IActivityProcess {
 
             // 3. 结果落库
             try {
-                DrawAwardInfo drawAwardInfo = drawResult.getDrawAwardInfo();
-                activityPartake.recordDrawOrder(buildDrawOrderVO(req, strategyId, takeId, drawAwardInfo));
+                DrawAwardVO drawAwardVO = drawResult.getDrawAwardVO();
+                activityPartake.recordDrawOrder(buildDrawOrderVO(req, strategyId, takeId, drawAwardVO));
             } catch (Exception e) {
                 return handleException("结果落库", e);
             }
@@ -67,12 +84,23 @@ public class ActivityProcessImpl implements IActivityProcess {
 
 
             // 5. 返回结果
-            return new DrawProcessResult(Constants.ResponseCode.SUCCESS.getCode(), Constants.ResponseCode.SUCCESS.getInfo(), drawResult.getDrawAwardInfo());
+            return new DrawProcessResult(Constants.ResponseCode.SUCCESS.getCode(), Constants.ResponseCode.SUCCESS.getInfo(), drawResult.getDrawAwardVO());
 
         } catch (Exception e) {
             // 捕获整个流程的异常
             return handleException("整体流程", e);
         }
+    }
+
+    /**
+     * 规则量化人群，返回可参与的活动ID
+     *
+     * @param req 规则请求
+     * @return 量化结果，用户可以参与的活动ID
+     */
+    @Override
+    public RuleQuantificationCrowdResult doRuleQuantificationCrowd(DecisionMatterReq req) {
+        return null;
     }
 
     // 异常处理方法
@@ -83,7 +111,7 @@ public class ActivityProcessImpl implements IActivityProcess {
         return new DrawProcessResult(Constants.ResponseCode.UN_ERROR.getCode(), "在步骤 [" + step + "] 中发生异常：" + e.getMessage());
     }
 
-    private DrawOrderVO buildDrawOrderVO(DrawProcessReq req, Long strategyId, Long takeId, DrawAwardInfo drawAwardInfo) {
+    private DrawOrderVO buildDrawOrderVO(DrawProcessReq req, Long strategyId, Long takeId, DrawAwardVO drawAwardVO) {
         long orderId = idGeneratorMap.get(Constants.Ids.SnowFlake).nextId();
         DrawOrderVO drawOrderVO = new DrawOrderVO();
         drawOrderVO.setUId(req.getUId());
@@ -91,14 +119,14 @@ public class ActivityProcessImpl implements IActivityProcess {
         drawOrderVO.setActivityId(req.getActivityId());
         drawOrderVO.setOrderId(orderId);
         drawOrderVO.setStrategyId(strategyId);
-        drawOrderVO.setStrategyMode(drawAwardInfo.getStrategyMode());
-        drawOrderVO.setGrantType(drawAwardInfo.getGrantType());
-        drawOrderVO.setGrantDate(drawAwardInfo.getGrantDate());
+        drawOrderVO.setStrategyMode(drawAwardVO.getStrategyMode());
+        drawOrderVO.setGrantType(drawAwardVO.getGrantType());
+        drawOrderVO.setGrantDate(drawAwardVO.getGrantDate());
         drawOrderVO.setGrantState(Constants.GrantState.INIT.getCode());
-        drawOrderVO.setAwardId(drawAwardInfo.getAwardId());
-        drawOrderVO.setAwardType(drawAwardInfo.getAwardType());
-        drawOrderVO.setAwardName(drawAwardInfo.getAwardName());
-        drawOrderVO.setAwardContent(drawAwardInfo.getAwardContent());
+        drawOrderVO.setAwardId(drawAwardVO.getAwardId());
+        drawOrderVO.setAwardType(drawAwardVO.getAwardType());
+        drawOrderVO.setAwardName(drawAwardVO.getAwardName());
+        drawOrderVO.setAwardContent(drawAwardVO.getAwardContent());
         return drawOrderVO;
     }
 

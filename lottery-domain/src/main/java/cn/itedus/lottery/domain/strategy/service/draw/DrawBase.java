@@ -1,7 +1,7 @@
 package cn.itedus.lottery.domain.strategy.service.draw;
 
 import cn.itedus.lottery.domain.activity.model.vo.StrategyDetailVO;
-import cn.itedus.lottery.domain.strategy.model.vo.AwardRateInfo;
+import cn.itedus.lottery.domain.strategy.model.vo.AwardRateVO;
 import cn.itedus.lottery.domain.strategy.service.algorithm.IDrawAlgorithm;
 
 import java.util.ArrayList;
@@ -34,17 +34,17 @@ public class DrawBase extends DrawConfig {
         if (existRateTuple) return;
 
         // 转换数据结构：将策略详情列表转换为算法所需的概率元组格式
-        List<AwardRateInfo> awardRateInfoList = new ArrayList<>(strategyDetailList.size());
+        List<AwardRateVO> awardRateVOList = new ArrayList<>(strategyDetailList.size());
         for (StrategyDetailVO strategyDetail : strategyDetailList) {
             // 构建包含奖品ID和概率值的元组对象
-            awardRateInfoList.add(new AwardRateInfo(
+            awardRateVOList.add(new AwardRateVO(
                     strategyDetail.getAwardId(),
                     strategyDetail.getAwardRate()
             ));
         }
 
         // 调用算法进行概率元组初始化（后续抽奖计算的基础数据）
-        drawAlgorithm.initRateTuple(strategyId, awardRateInfoList);
+        drawAlgorithm.initRateTuple(strategyId, awardRateVOList);
     }
 }
 

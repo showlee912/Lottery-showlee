@@ -1,6 +1,6 @@
 package cn.itedus.lottery.domain.strategy.service.algorithm;
 
-import cn.itedus.lottery.domain.strategy.model.vo.AwardRateInfo;
+import cn.itedus.lottery.domain.strategy.model.vo.AwardRateVO;
 
 import java.util.List;
 
@@ -12,9 +12,9 @@ public interface IDrawAlgorithm {
     /**
      * 程序启动时初始化概率元祖，在初始化完成后使用过程中不允许修改元祖数据
      * @param strategyId        策略ID
-     * @param awardRateInfoList 奖品概率配置集合，值示例：AwardRateInfo.awardRate = 0.04
+     * @param awardRateVOList 奖品概率配置集合，值示例：AwardRateInfo.awardRate = 0.04
      */
-    void initRateTuple(Long strategyId, List<AwardRateInfo> awardRateInfoList);
+    void initRateTuple(Long strategyId, List<AwardRateVO> awardRateVOList);
 
     /**
      * 判断是否已经，做了数据初始化

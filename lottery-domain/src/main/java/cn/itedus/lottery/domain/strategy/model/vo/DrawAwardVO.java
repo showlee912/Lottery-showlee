@@ -2,6 +2,7 @@ package cn.itedus.lottery.domain.strategy.model.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
@@ -10,8 +11,13 @@ import java.util.Date;
  */
 @Data
 @AllArgsConstructor
-public class DrawAwardInfo {
+@NoArgsConstructor
+public class DrawAwardVO {
 
+    /**
+     * 用户ID
+     */
+    private String uId;
     /**
      * 奖品ID
      */
@@ -47,13 +53,19 @@ public class DrawAwardInfo {
      */
     private Date grantDate;
 
-    public DrawAwardInfo(String awardId, String awardName,Integer awardType,String awardContent) {
+    public DrawAwardVO(String awardId, String awardName, Integer awardType, String awardContent) {
         this.awardId = awardId;
         this.awardName = awardName;
         this.awardType = awardType;
-
         this.awardContent = awardContent;
     }
 
+    public String getuId() {
+        return uId;
+    }
+
+    public void setuId(String uId) {
+        this.uId = uId;
+    }
 }
 

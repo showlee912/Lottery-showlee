@@ -76,7 +76,7 @@ public abstract class BaseActivityPartake extends ActivityPartakeSupport impleme
 
 
     /**
-     * 活动信息校验处理，把活动库存、状态、日期、个人参与次数
+     * 活动信息校验处理
      *
      * @param partake 参与活动请求
      * @param bill    活动账单

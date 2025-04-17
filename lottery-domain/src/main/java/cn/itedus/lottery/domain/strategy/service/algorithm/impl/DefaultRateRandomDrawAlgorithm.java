@@ -1,6 +1,6 @@
 package cn.itedus.lottery.domain.strategy.service.algorithm.impl;
 
-import cn.itedus.lottery.domain.strategy.model.vo.AwardRateInfo;
+import cn.itedus.lottery.domain.strategy.model.vo.AwardRateVO;
 import cn.itedus.lottery.domain.strategy.service.algorithm.BaseAlgorithm;
 import org.springframework.stereotype.Component;
 
@@ -29,18 +29,18 @@ public class DefaultRateRandomDrawAlgorithm extends BaseAlgorithm {
         // 阶段1：构建有效奖品集合
         // -----------------------------------------------------------
         BigDecimal differenceDenominator = BigDecimal.ZERO;
-        List<AwardRateInfo> differenceAwardRateList = new ArrayList<>();
+        List<AwardRateVO> differenceAwardRateList = new ArrayList<>();
 
         // 遍历策略下所有奖品配置
-        List<AwardRateInfo> awardRateIntervalValList = awardRateInfoMap.get(strategyId);
-        for (AwardRateInfo awardRateInfo : awardRateIntervalValList) {
-            String awardId = awardRateInfo.getAwardId();
+        List<AwardRateVO> awardRateIntervalValList = awardRateInfoMap.get(strategyId);
+        for (AwardRateVO awardRateVO : awardRateIntervalValList) {
+            String awardId = awardRateVO.getAwardId();
             // 过滤黑名单中的奖品（已中奖/不可参与抽奖的奖品）
             if (excludeAwardIds.contains(awardId)) continue;
 
             // 累计有效奖品总概率（用于后续概率重新分配）
-            differenceAwardRateList.add(awardRateInfo);
-            differenceDenominator = differenceDenominator.add(awardRateInfo.getAwardRate());
+            differenceAwardRateList.add(awardRateVO);
+            differenceDenominator = differenceDenominator.add(awardRateVO.getAwardRate());
         }
 
         // 阶段2：边界情况处理
@@ -58,16 +58,16 @@ public class DefaultRateRandomDrawAlgorithm extends BaseAlgorithm {
         // 阶段4：概率区间匹配
         String awardId = "";
         int cursorVal = 0;  // 概率区间游标
-        for (AwardRateInfo awardRateInfo : differenceAwardRateList) {
+        for (AwardRateVO awardRateVO : differenceAwardRateList) {
             // 计算当前奖品在剩余概率中的实际占比（百分比取整）
-            int rateVal = awardRateInfo.getAwardRate()
+            int rateVal = awardRateVO.getAwardRate()
                     .divide(differenceDenominator, 2, BigDecimal.ROUND_UP)  // 保留2位小数（向上取整）
                     .multiply(new BigDecimal(100))
                     .intValue();
 
             // 判断随机数是否落在当前区间
             if (randomVal <= (cursorVal + rateVal)) {
-                awardId = awardRateInfo.getAwardId();
+                awardId = awardRateVO.getAwardId();
                 break;
             }
             cursorVal += rateVal;  // 移动概率游标

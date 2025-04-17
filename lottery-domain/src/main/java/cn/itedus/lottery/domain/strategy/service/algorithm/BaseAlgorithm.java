@@ -1,6 +1,6 @@
 package cn.itedus.lottery.domain.strategy.service.algorithm;
 
-import cn.itedus.lottery.domain.strategy.model.vo.AwardRateInfo;
+import cn.itedus.lottery.domain.strategy.model.vo.AwardRateVO;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -53,7 +53,7 @@ public abstract class BaseAlgorithm implements IDrawAlgorithm {
      * ]
      * }
      */
-    protected Map<Long, List<AwardRateInfo>> awardRateInfoMap = new ConcurrentHashMap<>();
+    protected Map<Long, List<AwardRateVO>> awardRateInfoMap = new ConcurrentHashMap<>();
 
     /**
      * 初始化概率元组
@@ -63,12 +63,12 @@ public abstract class BaseAlgorithm implements IDrawAlgorithm {
      * 3. 算法复杂度为 O(n) ，n为奖项数量
      *
      * @param strategyId        策略ID
-     * @param awardRateInfoList 奖品概率配置列表（包含奖品ID和概率）
+     * @param awardRateVOList 奖品概率配置列表（包含奖品ID和概率）
      */
     @Override
-    public void initRateTuple(Long strategyId, List<AwardRateInfo> awardRateInfoList) {
+    public void initRateTuple(Long strategyId, List<AwardRateVO> awardRateVOList) {
         // 保存奖品概率信息到 awardRateInfoMap 中，键为策略ID，值为奖品概率配置列表
-        awardRateInfoMap.put(strategyId, awardRateInfoList);
+        awardRateInfoMap.put(strategyId, awardRateVOList);
 
         // 如果 rateTupleMap 中不存在当前策略ID，则新增一个长度为 RATE_TUPLE_LENGTH 的数组并添加进 rateTupleMap
         String[] rateTuple = rateTupleMap.computeIfAbsent(strategyId, k -> new String[RATE_TUPLE_LENGTH]);
@@ -77,14 +77,14 @@ public abstract class BaseAlgorithm implements IDrawAlgorithm {
         int cursor = 0;
 
         // 遍历奖品概率配置列表
-        for (AwardRateInfo awardRateInfo : awardRateInfoList) {
+        for (AwardRateVO awardRateVO : awardRateVOList) {
             // 将奖品概率（小数）乘以100，转换为整数值范围
-            int rateVal = awardRateInfo.getAwardRate().multiply(new BigDecimal(100)).intValue();
+            int rateVal = awardRateVO.getAwardRate().multiply(new BigDecimal(100)).intValue();
 
             // 循环填充概率范围值，将奖品ID填充到 rateTuple 数组的特定索引位置
             for (int i = cursor + 1; i <= (rateVal + cursor); i++) {
                 // 计算哈希索引，并将奖品ID填充到对应位置
-                rateTuple[hashIdx(i)] = awardRateInfo.getAwardId();
+                rateTuple[hashIdx(i)] = awardRateVO.getAwardId();
             }
 
             // 更新游标值，以便下一个奖品的概率范围能够正确填充

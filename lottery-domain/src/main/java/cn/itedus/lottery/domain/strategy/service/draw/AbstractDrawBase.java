@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 抽奖过程的模板模式
+ * 抽奖过程抽象类（模板模式）
  */
 public abstract class AbstractDrawBase extends DrawStrategySupport implements IDrawExec {
 
@@ -62,13 +62,13 @@ public abstract class AbstractDrawBase extends DrawStrategySupport implements ID
         if (DrawAlgorithm.isExistRateTuple(strategyId)) return;
 
         //初始化概率元组
-        ArrayList<AwardRateInfo> awardRateInfos = new ArrayList<>(strategyDetailList.size());
+        ArrayList<AwardRateVO> awardRateVOS = new ArrayList<>(strategyDetailList.size());
 
         for (StrategyDetailBriefVO strategyDetail : strategyDetailList) {
-            awardRateInfos.add(new AwardRateInfo(strategyDetail.getAwardId(),strategyDetail.getAwardRate()));
+            awardRateVOS.add(new AwardRateVO(strategyDetail.getAwardId(),strategyDetail.getAwardRate()));
         }
 
-        DrawAlgorithm.initRateTuple(strategyId,awardRateInfos);
+        DrawAlgorithm.initRateTuple(strategyId, awardRateVOS);
     }
 
     /**
@@ -107,10 +107,10 @@ public abstract class AbstractDrawBase extends DrawStrategySupport implements ID
         }
 
         AwardBriefVO award = super.queryAwardInfoByAwardId(awardId);
-        DrawAwardInfo drawAwardInfo = new DrawAwardInfo(award.getAwardId(), award.getAwardName(),award.getAwardType(),award.getAwardContent());
+        DrawAwardVO drawAwardVO = new DrawAwardVO(award.getAwardId(), award.getAwardName(),award.getAwardType(),award.getAwardContent());
         logger.info("执行策略抽奖完成【已中奖】，用户：{} 策略ID：{} 奖品ID：{} 奖品名称：{}", uid, strategyId, awardId, award.getAwardName());
 
-        return new DrawResult(uid, strategyId, Constants.DrawState.SUCCESS.getCode(), drawAwardInfo);
+        return new DrawResult(uid, strategyId, Constants.DrawState.SUCCESS.getCode(), drawAwardVO);
     }
 }
 

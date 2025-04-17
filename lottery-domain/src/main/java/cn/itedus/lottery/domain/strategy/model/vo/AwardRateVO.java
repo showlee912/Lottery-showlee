@@ -2,6 +2,7 @@ package cn.itedus.lottery.domain.strategy.model.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
@@ -10,7 +11,8 @@ import java.math.BigDecimal;
  */
 @Data
 @AllArgsConstructor
-public class AwardRateInfo {
+@NoArgsConstructor
+public class AwardRateVO {
 
     // 奖品ID
     private String awardId;

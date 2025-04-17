@@ -1,6 +1,6 @@
 package cn.itedus.lottery.domain.strategy.model.res;
 
-import cn.itedus.lottery.domain.strategy.model.vo.DrawAwardInfo;
+import cn.itedus.lottery.domain.strategy.model.vo.DrawAwardVO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -25,7 +25,7 @@ public class DrawResult {
     /**
      * 中奖奖品信息
      */
-    private DrawAwardInfo drawAwardInfo;
+    private DrawAwardVO drawAwardVO;
 
     public DrawResult(String uId, Long strategyId, Integer drawState) {
         this.uId = uId;

@@ -1,7 +1,7 @@
 package cn.itedus.lottery.application.process.res;
 
 import cn.itedus.lottery.common.Result;
-import cn.itedus.lottery.domain.strategy.model.vo.DrawAwardInfo;
+import cn.itedus.lottery.domain.strategy.model.vo.DrawAwardVO;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,15 +12,16 @@ import lombok.Setter;
 @Setter
 public class DrawProcessResult extends Result {
 
-    private DrawAwardInfo drawAwardInfo;
+    /**奖品信息*/
+    private DrawAwardVO drawAwardVO;
 
     public DrawProcessResult(String code, String info) {
         super(code, info);
     }
 
-    public DrawProcessResult(String code, String info, DrawAwardInfo drawAwardInfo) {
+    public DrawProcessResult(String code, String info, DrawAwardVO drawAwardVO) {
         super(code, info);
-        this.drawAwardInfo = drawAwardInfo;
+        this.drawAwardVO = drawAwardVO;
     }
 
 
