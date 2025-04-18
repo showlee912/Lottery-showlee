@@ -74,7 +74,7 @@
             <groupId>cn.bugstack.middleware</groupId>
             <artifactId>db-router-spring-boot-starter</artifactId>
         </dependency>
-        <!-- MapStruct begin -->
+        <!-- MapStruct -->
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
@@ -83,6 +83,12 @@
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct-processor</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>cn.itedus.lottery</groupId>
             <artifactId>lottery-application</artifactId>
