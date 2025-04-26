@@ -18,7 +18,7 @@ public class GoodsReq {
     /**
      * 抽奖单号 ID
      */
-    private String orderId;
+    private Long orderId;
 
     /**
      * 奖品ID
@@ -45,7 +45,7 @@ public class GoodsReq {
      */
     private String extInfo;
 
-    public GoodsReq(String uId, String orderId, String awardId, String awardName, String awardContent) {
+    public GoodsReq(String uId, Long orderId, String awardId, String awardName, String awardContent) {
         this.uid = uId;
         this.orderId = orderId;
         this.awardId = awardId;

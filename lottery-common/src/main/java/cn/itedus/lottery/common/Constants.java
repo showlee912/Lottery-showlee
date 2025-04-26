@@ -278,4 +278,25 @@ public class Constants {
         /** 枚举 */
         public static final int ENUM = 6;
     }
+
+
+    @Getter
+    @AllArgsConstructor
+    public enum MQState {
+        INIT(0, "初始"),
+        COMPLETE(1, "完成"),
+        FAIL(2, "失败");
+
+        private Integer code;
+        private String info;
+
+
+        public void setCode(Integer code) {
+            this.code = code;
+        }
+
+        public void setInfo(String info) {
+            this.info = info;
+        }
+    }
 }

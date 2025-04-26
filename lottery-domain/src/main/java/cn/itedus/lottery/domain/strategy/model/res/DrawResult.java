@@ -1,5 +1,6 @@
 package cn.itedus.lottery.domain.strategy.model.res;
 
+import cn.itedus.lottery.common.Constants;
 import cn.itedus.lottery.domain.strategy.model.vo.DrawAwardVO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,7 +21,7 @@ public class DrawResult {
     /**
      * 中奖状态：0未中奖、1已中奖、2兜底奖
      */
-    private Integer drawState;
+    private Integer drawState = Constants.DrawState.FAIL.getCode();
 
     /**
      * 中奖奖品信息

@@ -23,15 +23,20 @@ public class ActivityProcessTest {
     @Resource
     private IActivityProcess activityProcess;
 
+    // 在测试类中添加等待逻辑
     @Test
-    public void test_doDrawProcess() {
+    public void test_doDrawProcess() throws InterruptedException {
         DrawProcessReq req = new DrawProcessReq();
         req.setUId("fustack");
         req.setActivityId(100001L);
+
         DrawProcessResult drawProcessResult = activityProcess.doDrawProcess(req);
 
         logger.info("请求入参：{}", JSON.toJSONString(req));
         logger.info("测试结果：{}", JSON.toJSONString(drawProcessResult));
-    }
 
+        // 添加等待时间，确保消费者有足够时间处理消息
+        logger.info("等待Kafka消费者处理消息...");
+        Thread.sleep(5000);
+    }
 }

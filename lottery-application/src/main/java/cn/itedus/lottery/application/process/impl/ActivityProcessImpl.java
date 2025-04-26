@@ -1,5 +1,6 @@
 package cn.itedus.lottery.application.process.impl;
 
+import cn.itedus.lottery.application.mq.producer.KafkaProducer;
 import cn.itedus.lottery.application.process.IActivityProcess;
 import cn.itedus.lottery.application.process.req.DrawProcessReq;
 import cn.itedus.lottery.application.process.res.DrawProcessResult;
@@ -8,6 +9,7 @@ import cn.itedus.lottery.common.Constants;
 import cn.itedus.lottery.domain.activity.model.req.PartakeReq;
 import cn.itedus.lottery.domain.activity.model.res.PartakeResult;
 import cn.itedus.lottery.domain.activity.model.vo.DrawOrderVO;
+import cn.itedus.lottery.domain.activity.model.vo.InvoiceVO;
 import cn.itedus.lottery.domain.activity.service.partake.IActivityPartake;
 import cn.itedus.lottery.domain.rule.model.req.DecisionMatterReq;
 import cn.itedus.lottery.domain.strategy.model.req.DrawReq;
@@ -15,7 +17,10 @@ import cn.itedus.lottery.domain.strategy.model.res.DrawResult;
 import cn.itedus.lottery.domain.strategy.model.vo.DrawAwardVO;
 import cn.itedus.lottery.domain.strategy.service.draw.IDrawExec;
 import cn.itedus.lottery.domain.support.ids.IIdGenerator;
+import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
+import org.springframework.util.concurrent.ListenableFuture;
+import org.springframework.util.concurrent.ListenableFutureCallback;
 
 import javax.annotation.Resource;
 import java.util.Map;
@@ -34,6 +39,9 @@ public class ActivityProcessImpl implements IActivityProcess {
 
     @Resource
     private Map<Constants.Ids, IIdGenerator> idGeneratorMap;
+
+    @Resource
+    private KafkaProducer kafkaProducer;
 
     /**
      * 执行抽奖流程
@@ -73,14 +81,31 @@ public class ActivityProcessImpl implements IActivityProcess {
             }
 
             // 3. 结果落库
+            DrawOrderVO drawOrderVO;
             try {
                 DrawAwardVO drawAwardVO = drawResult.getDrawAwardVO();
-                activityPartake.recordDrawOrder(buildDrawOrderVO(req, strategyId, takeId, drawAwardVO));
+                 drawOrderVO = buildDrawOrderVO(req, strategyId, takeId, drawAwardVO);
+                activityPartake.recordDrawOrder(drawOrderVO);
             } catch (Exception e) {
                 return handleException("结果落库", e);
             }
 
             // 4. 发送MQ，触发发奖流程
+
+            InvoiceVO invoiceVO = buildInvoiceVO(drawOrderVO);
+            ListenableFuture<SendResult<String, Object>> future = kafkaProducer.sendLotteryInvoice(invoiceVO);
+
+            future.addCallback(new ListenableFutureCallback<SendResult<String, Object>>() {
+                @Override
+                public void onFailure(Throwable throwable) {
+                    activityPartake.updateInvoiceMqState(invoiceVO.getUId(), invoiceVO.getOrderId(), Constants.MQState.FAIL.getCode());
+                }
+
+                @Override
+                public void onSuccess(SendResult<String, Object> stringObjectSendResult) {
+                    activityPartake.updateInvoiceMqState(invoiceVO.getUId(), invoiceVO.getOrderId(), Constants.MQState.COMPLETE.getCode());
+                }
+            });
 
 
             // 5. 返回结果
@@ -111,6 +136,15 @@ public class ActivityProcessImpl implements IActivityProcess {
         return new DrawProcessResult(Constants.ResponseCode.UN_ERROR.getCode(), "在步骤 [" + step + "] 中发生异常：" + e.getMessage());
     }
 
+    /**
+     * 构建抽奖订单对象
+     *
+     * @param req        抽奖请求对象，包含用户ID和活动ID
+     * @param strategyId 策略ID
+     * @param takeId     参与记录ID
+     * @param drawAwardVO 抽奖结果对象
+     * @return 构建好的抽奖订单对象
+     */
     private DrawOrderVO buildDrawOrderVO(DrawProcessReq req, Long strategyId, Long takeId, DrawAwardVO drawAwardVO) {
         long orderId = idGeneratorMap.get(Constants.Ids.SnowFlake).nextId();
         DrawOrderVO drawOrderVO = new DrawOrderVO();
@@ -128,6 +162,25 @@ public class ActivityProcessImpl implements IActivityProcess {
         drawOrderVO.setAwardName(drawAwardVO.getAwardName());
         drawOrderVO.setAwardContent(drawAwardVO.getAwardContent());
         return drawOrderVO;
+    }
+
+    /**
+     * 构建发货单对象
+     *
+     * @param drawOrderVO 抽奖订单对象
+     * @return 发货单对象
+     */
+    private InvoiceVO buildInvoiceVO(DrawOrderVO drawOrderVO) {
+        InvoiceVO invoiceVO = new InvoiceVO();
+        invoiceVO.setUId(drawOrderVO.getUId());
+        invoiceVO.setOrderId(drawOrderVO.getOrderId());
+        invoiceVO.setAwardId(drawOrderVO.getAwardId());
+        invoiceVO.setAwardType(drawOrderVO.getAwardType());
+        invoiceVO.setAwardName(drawOrderVO.getAwardName());
+        invoiceVO.setAwardContent(drawOrderVO.getAwardContent());
+        invoiceVO.setShippingAddress(null);
+        invoiceVO.setExtInfo(null);
+        return invoiceVO;
     }
 
 }

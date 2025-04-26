@@ -154,4 +154,20 @@ public class UserTakeActivityRepository implements IUserTakeActivityRepository {
 
         userStrategyExportDao.insert(userStrategyExport);
     }
+
+    /**
+     * 更新发货单MQ状态
+     *
+     * @param uId     用户ID
+     * @param orderId 订单ID
+     * @param mqState MQ 发送状态
+     */
+    @Override
+    public void updateInvoiceMqState(String uId, Long orderId, Integer mqState) {
+        UserStrategyExport userStrategyExport = new UserStrategyExport();
+        userStrategyExport.setUId(uId);
+        userStrategyExport.setOrderId(orderId);
+        userStrategyExport.setMqState(mqState);
+        userStrategyExportDao.updateInvoiceMqState(userStrategyExport);
+    }
 }

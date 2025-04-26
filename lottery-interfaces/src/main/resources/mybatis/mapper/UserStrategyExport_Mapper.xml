@@ -16,6 +16,16 @@
          #{awardName},#{awardContent},#{uuid},now(),now())
     </insert>
 
+    <update id="updateInvoiceMqState" parameterType="cn.itedus.lottery.infrastructure.po.UserStrategyExport">
+        UPDATE user_strategy_export SET mq_state = #{mqState}, update_time = now()
+        WHERE u_id = #{uId} AND order_id = #{orderId}
+    </update>
+
+    <update id="updateUserAwardState" parameterType="cn.itedus.lottery.infrastructure.po.UserStrategyExport">
+        UPDATE user_strategy_export SET grant_state = #{grantState}, grant_date = now(), update_time = now()
+        WHERE u_id = #{uId} AND order_id = #{orderId} AND award_id = #{awardId}
+    </update>
+
     <select id="queryUserStrategyExportByUId" parameterType="java.lang.String" resultMap="userStrategyExportMap">
         SELECT id, u_id, activity_id, order_id, strategy_id, strategy_mode,
                grant_type, grant_date, grant_state, award_id, award_type,
