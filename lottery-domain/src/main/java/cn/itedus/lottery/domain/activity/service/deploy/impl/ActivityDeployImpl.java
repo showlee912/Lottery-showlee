@@ -62,6 +62,19 @@ public class ActivityDeployImpl implements IActivityDeploy {
      */
     @Override
     public void updateActivity(ActivityConfigReq req) {
+        // TODO: 非核心功能后续补充
+    }
 
+    /**
+     * 扫描待处理的活动列表，状态为：通过、活动中
+     * <p>
+     * 通过 -> 时间符合时 -> 活动中 活动中 -> 时间到期时 -> 关闭
+     *
+     * @param id ID
+     * @return 待处理的活动集合
+     */
+    @Override
+    public List<ActivityVO> scanToDoActivityList(Long id) {
+        return activityRepository.scanToDoActivityList(id);
     }
 }

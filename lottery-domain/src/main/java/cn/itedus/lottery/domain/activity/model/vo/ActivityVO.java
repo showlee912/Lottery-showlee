@@ -10,6 +10,9 @@ import java.util.Date;
 @Data
 public class ActivityVO {
 
+
+    private Long id;
+
     /**
      * 活动ID
      */

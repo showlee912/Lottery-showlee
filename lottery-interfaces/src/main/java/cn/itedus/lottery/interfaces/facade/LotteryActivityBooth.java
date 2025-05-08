@@ -6,8 +6,6 @@ import cn.itedus.lottery.application.process.res.DrawProcessResult;
 import cn.itedus.lottery.application.process.res.RuleQuantificationCrowdResult;
 import cn.itedus.lottery.common.Constants;
 import cn.itedus.lottery.domain.rule.model.req.DecisionMatterReq;
-import cn.itedus.lottery.domain.strategy.model.vo.DrawAwardVO;
-import cn.itedus.lottery.interfaces.assembler.IMapping;
 import cn.itedus.lottery.rpc.ILotteryActivityBooth;
 import cn.itedus.lottery.rpc.dto.AwardDTO;
 import cn.itedus.lottery.rpc.req.DrawReq;
@@ -28,8 +26,8 @@ public class LotteryActivityBooth implements ILotteryActivityBooth {
     @Resource
     private IActivityProcess activityProcess;
 
-    @Resource
-    private IMapping<DrawAwardVO, AwardDTO> awardMapping;
+//    @Resource
+//    private IMapping<DrawAwardVO, AwardDTO> awardMapping;
 
     @Override
     public DrawRes doDraw(DrawReq drawReq) {
@@ -71,8 +69,13 @@ public class LotteryActivityBooth implements ILotteryActivityBooth {
             }
 
             // 2. 数据转换 DrawAwardVO -> AwardDTO
-            AwardDTO awardDTO = awardMapping.sourceToTarget(drawProcessResult.getDrawAwardVO());
+//            AwardDTO awardDTO = awardMapping.sourceToTarget(drawProcessResult.getDrawAwardVO());
+//            awardDTO.setActivityId(activityId);
+            AwardDTO awardDTO = org.springframework.beans.BeanUtils.instantiateClass(AwardDTO.class);
+            org.springframework.beans.BeanUtils.copyProperties(awardDTO, drawProcessResult.getDrawAwardVO());
+            awardDTO.setUserId(drawProcessResult.getDrawAwardVO().getuId());
             awardDTO.setActivityId(activityId);
+
 
             // 3. 封装数据并返回
             DrawRes drawRes = new DrawRes(Constants.ResponseCode.SUCCESS.getCode(),

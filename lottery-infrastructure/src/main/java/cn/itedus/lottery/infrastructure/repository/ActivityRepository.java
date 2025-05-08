@@ -158,4 +158,27 @@ public class ActivityRepository implements IActivityRepository {
         return activityDao.subtractionActivityStock(activityId);
     }
 
+    /**
+     * 扫描待处理的活动列表，状态为：通过、活动中
+     *
+     * @param id ID
+     * @return 待处理的活动集合
+     */
+    @Override
+    public List<ActivityVO> scanToDoActivityList(Long id) {
+        List<Activity> activityList = activityDao.scanToDoActivityList(id);
+        List<ActivityVO> activityVOList = new ArrayList<>(activityList.size());
+        for (Activity activity : activityList) {
+            ActivityVO activityVO = new ActivityVO();
+            activityVO.setId(activity.getId());
+            activityVO.setActivityId(activity.getActivityId());
+            activityVO.setActivityName(activity.getActivityName());
+            activityVO.setBeginDateTime(activity.getBeginDateTime());
+            activityVO.setEndDateTime(activity.getEndDateTime());
+            activityVO.setState(activity.getState());
+            activityVOList.add(activityVO);
+        }
+        return activityVOList;
+    }
+
 }

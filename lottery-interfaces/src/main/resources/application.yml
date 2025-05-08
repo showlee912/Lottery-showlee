@@ -89,10 +89,22 @@ dubbo:
   scan:
     base-packages: cn.itedus.lottery.rpc
 
-## 新增日志配置（添加在文件末尾）
-#logging:
-#  level:
-#    root: info
-#    org.apache.dubbo: debug
-#    cn.itedus.lottery: debug
+# xxl-job
+# 官网：https://github.com/xuxueli/xxl-job/
+# 地址：http://localhost:7397/xxl-job-admin 【需要先启动 xxl-job】
+# 账号：admin
+# 密码：123456
+xxl:
+  job:
+    admin:
+      addresses: http://127.0.0.1:7397/xxl-job-admin
+    executor:
+      address:
+      appname: lottery-job
+      ip:
+      port: 9999
+      logpath:
+      logretentiondays: 50
+    accessToken: default_token
+
 
