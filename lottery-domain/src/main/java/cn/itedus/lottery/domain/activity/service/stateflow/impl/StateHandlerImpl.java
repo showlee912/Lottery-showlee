@@ -6,7 +6,10 @@ import cn.itedus.lottery.domain.activity.service.stateflow.IStateHandler;
 import cn.itedus.lottery.domain.activity.service.stateflow.StateConfig;
 import org.springframework.stereotype.Service;
 
-/**状态处理服务*/
+/**
+ * 状态处理上下文，负责状态之间的转换
+ * 具体过程：传入活动ID和当前状态，调用对应状态的处理方法
+ */
 @Service
 public class StateHandlerImpl extends StateConfig implements IStateHandler {
     @Override

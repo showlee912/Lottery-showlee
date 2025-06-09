@@ -7,6 +7,11 @@ import cn.itedus.lottery.domain.strategy.service.algorithm.IDrawAlgorithm;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * 抽奖基础配置类
+ * 主要负责校验和初始化抽奖策略的概率元组数据
+ */
 public class DrawBase extends DrawConfig {
 
     /**

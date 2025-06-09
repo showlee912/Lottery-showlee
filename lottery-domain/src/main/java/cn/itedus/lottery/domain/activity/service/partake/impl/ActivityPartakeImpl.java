@@ -6,6 +6,7 @@ import cn.itedus.lottery.common.Result;
 import cn.itedus.lottery.domain.activity.model.req.PartakeReq;
 import cn.itedus.lottery.domain.activity.model.vo.ActivityBillVO;
 import cn.itedus.lottery.domain.activity.model.vo.DrawOrderVO;
+import cn.itedus.lottery.domain.activity.model.vo.InvoiceVO;
 import cn.itedus.lottery.domain.activity.model.vo.UserTakeActivityVO;
 import cn.itedus.lottery.domain.activity.repository.IUserTakeActivityRepository;
 import cn.itedus.lottery.domain.activity.service.partake.BaseActivityPartake;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -160,12 +162,13 @@ public class ActivityPartakeImpl extends BaseActivityPartake {
             return transactionTemplate.execute(status -> {
                 try {
                     //锁定活动领取记录
-                   int lockCount = userTakeActivityRepository.lockTakeActivity(drawOrder.getUId(), drawOrder.getActivityId(), drawOrder.getTakeId());
-                   if (0 == lockCount){
-                       status.setRollbackOnly();
-                       return Result.buildResult(Constants.ResponseCode.NO_UPDATE);
-                   }
-                   //保存抽奖信息
+                    int lockCount = userTakeActivityRepository.lockTakeActivity(drawOrder.getUId(),
+                            drawOrder.getActivityId(), drawOrder.getTakeId());
+                    if (0 == lockCount) {
+                        status.setRollbackOnly();
+                        return Result.buildResult(Constants.ResponseCode.NO_UPDATE);
+                    }
+                    //保存抽奖信息
                     userTakeActivityRepository.saveUserStrategyExport(drawOrder);
                 } catch (DuplicateKeyException e) {
                     logger.error("记录中奖单，唯一索引冲突 activityId：{} uId：{}", drawOrder.getActivityId(), drawOrder.getUId(), e);
@@ -192,5 +195,26 @@ public class ActivityPartakeImpl extends BaseActivityPartake {
     public void updateInvoiceMqState(String uId, Long orderId, Integer mqState) {
         userTakeActivityRepository.updateInvoiceMqState(uId, orderId, mqState);
 
+    }
+
+    /**
+     * 扫描发货单[MQ]状态，返回未发送[MQ]的发货单
+     *
+     * @param dbCount 指定分库
+     * @param tbCount 指定分表
+     * @return 发货单
+     */
+    @Override
+    public List<InvoiceVO> scanInvoiceMqState(int dbCount, int tbCount) {
+        try {
+            // 设置路由
+            dbRouter.setDBKey(dbCount);
+            dbRouter.setTBKey(tbCount);
+
+            // 查询数据
+            return userTakeActivityRepository.scanInvoiceMqState();
+        } finally {
+            dbRouter.clear();
+        }
     }
 }

@@ -107,4 +107,7 @@ xxl:
       logretentiondays: 50
     accessToken: default_token
 
-
+logging:
+  level:
+    cn.itedus.lottery: DEBUG
+    org.springframework: INFO

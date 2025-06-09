@@ -10,11 +10,11 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * 规则配置
+ * 规则配置类，存储所有的逻辑过滤器映射
  */
 public class EngineConfig {
 
-    /**存储全部的过滤器映射*/
+    /** 存储全部的过滤器映射 */
     protected static Map<String, LogicFilter> logicFilterMap = new ConcurrentHashMap<>();
 
     @Resource

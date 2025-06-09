@@ -12,6 +12,10 @@ import javax.annotation.Resource;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * 奖品发放策略配置类
+ * 用于初始化奖品发放策略组
+ */
 public class GoodsConfig {
     @Resource
     private DescGoods descGoods;
@@ -35,6 +39,5 @@ public class GoodsConfig {
         goodsMap.put(Constants.AwardType.CouponGoods.getCode(), couponGoods);
         goodsMap.put(Constants.AwardType.PhysicalGoods.getCode(), physicalGoods);
     }
-
 
 }

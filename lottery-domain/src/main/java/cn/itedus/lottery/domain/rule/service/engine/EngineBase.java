@@ -24,10 +24,7 @@ public abstract class EngineBase extends EngineConfig implements EngineFilter {
      * @param matter 决策请求参数
      * @return 决策结果
      */
-    @Override
-    public EngineResult process(DecisionMatterReq matter) {
-        throw new RuntimeException("未实现规则引擎服务");
-    }
+    public abstract EngineResult process(DecisionMatterReq matter);
 
     /**
      * 决策树引擎决策方法

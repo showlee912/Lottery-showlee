@@ -13,7 +13,8 @@ public abstract class BaseLogic implements LogicFilter {
 
     /**
      * 过滤规则
-     * @param matterValue 决策的值
+     * 
+     * @param matterValue          决策的值
      * @param treeNodeLineInfoList 规则树节点连线信息列表
      * @return 匹配的节点ID，如果没有匹配则返回 TREE_NULL_NODE
      */
@@ -33,6 +34,7 @@ public abstract class BaseLogic implements LogicFilter {
 
     /**
      * 子类实现：获取规则比对值
+     * 
      * @param decisionMatter 决策请求
      * @return 比对值
      */
@@ -40,10 +42,10 @@ public abstract class BaseLogic implements LogicFilter {
     public abstract String matterValue(DecisionMatterReq decisionMatter);
 
     /**
-     * 决策逻辑
-     * 根据规则限制类型和规则限制值进行比对
+     * 判断决策值是否符合规则连线的限制条件
+     * 
      * @param matterValue 决策的值
-     * @param nodeLine 规则树节点连线信息
+     * @param nodeLine    规则树节点连线信息
      * @return 是否匹配
      */
     private boolean decisionLogic(String matterValue, TreeNodeLineVO nodeLine) {
